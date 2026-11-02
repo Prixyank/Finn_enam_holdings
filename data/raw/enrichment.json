@@ -1,0 +1,50 @@
+{
+ "_meta": {
+  "what": "Push-side enrichment for management changes: background of the incoming person. Web sources are allowed here per the brief (push enrichment is not the primary-data pull side).",
+  "fetched": "2026-10-27"
+ },
+ "HDFCBANK:2026-10-27:md-ceo": {
+  "ticker": "HDFCBANK",
+  "role": "Managing Director & CEO",
+  "incoming": "Anup Bagchi",
+  "outgoing": "Sashidhar Jagdishan",
+  "effective": "2026-10-27",
+  "term": "3 years, to 26 Oct 2029",
+  "approvals": "RBI approved (Sec. 35B, Banking Regulation Act); shareholder approval pending",
+  "background": [
+   "B.Tech, IIT Kanpur · MBA, IIM Bangalore",
+   "Joined ICICI Group in 1992 — retail, corporate banking, treasury",
+   "MD & CEO, ICICI Securities (2011–2016)",
+   "Executive Director, ICICI Bank (2017–2023): wholesale, digital, rural, markets, data",
+   "MD & CEO, ICICI Prudential Life (2023–2026)"
+  ],
+  "why_it_matters": "An external pick from the bank's closest rival, ICICI. Expect questions on strategy continuity at the next earnings call.",
+  "outgoing_note": "Predecessor exits on completing his tenure; the filing gives no other reason.",
+  "sources": [
+   {
+    "title": "Business Today — Bagchi takes charge as HDFC Bank MD & CEO",
+    "url": "https://www.businesstoday.in/latest/corporate/story/after-sashidhar-jagadishan-anup-bagchi-takes-charge-as-hdfc-bank-md-and-ceo-563841-2026-10-27"
+   },
+   {
+    "title": "Entrepreneur India — 5 things to know about Anup Bagchi",
+    "url": "https://india.entrepreneur.com/?p=100182"
+   },
+   {
+    "title": "NISM — Board of Governors profile",
+    "url": "https://www.nism.ac.in/governors/mr-anup-bagchi"
+   }
+  ]
+ },
+ "HAL:2026-10-07:director": {
+  "ticker": "HAL",
+  "role": "Government Nominee Director",
+  "incoming": "Anindya Biswas",
+  "outgoing": "K Rajalakshmi Menon",
+  "effective": "2026-10-07",
+  "background": [
+   "Designated DS & DG (Aero), Ministry of Defence (per HAL's 22 Oct correction filing)"
+  ],
+  "why_it_matters": "Routine government nominee rotation at a PSU; low signal.",
+  "sources": []
+ }
+}

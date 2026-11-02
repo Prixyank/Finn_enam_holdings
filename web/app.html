@@ -1,0 +1,800 @@
+<title>FINN</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: one 560px reading column, sticky masthead, fixed tab bar. Cards only where a decision is asked. */
+:root {
+  --ground: #e8ecf0;
+  --surface: #ffffff;
+  --raise: #f3f5f8;
+  --ink: #0f1b2d;
+  --ink-2: #4b5768;
+  --ink-3: #7a8596;
+  --line: #d4dae2;
+  --accent: #9a6200;
+  --accent-fill: #f0b43a;
+  --accent-soft: #fbefd3;
+  --up: #0d7a54;
+  --up-soft: #ddf1e8;
+  --down: #bf3a2b;
+  --down-soft: #f9e4e0;
+  --open: #3f5d8a;
+  --open-soft: #e3eaf5;
+  --shadow: 0 1px 2px rgba(15, 27, 45, .06), 0 4px 16px rgba(15, 27, 45, .05);
+  --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0a1019; --surface: #111a25; --raise: #172231; --ink: #e8edf4; --ink-2: #a2aebf;
+    --ink-3: #75839a; --line: #243245; --accent: #f0b43a; --accent-fill: #f0b43a; --accent-soft: #2b2312;
+    --up: #45d29c; --up-soft: #0f2a20; --down: #ff8170; --down-soft: #321714; --open: #8fb0e6; --open-soft: #17243a;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0a1019; --surface: #111a25; --raise: #172231; --ink: #e8edf4; --ink-2: #a2aebf;
+  --ink-3: #75839a; --line: #243245; --accent: #f0b43a; --accent-fill: #f0b43a; --accent-soft: #2b2312;
+  --up: #45d29c; --up-soft: #0f2a20; --down: #ff8170; --down-soft: #321714; --open: #8fb0e6; --open-soft: #17243a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--ground); }
+body { color: var(--ink); font: 16px/1.5 var(--f-body); -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--ground); }
+a { color: inherit; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent-fill); outline-offset: 2px; border-radius: 6px; }
+.num, .mono { font-family: var(--f-data); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.up { color: var(--up); } .down { color: var(--down); } .muted { color: var(--ink-2); } .faint { color: var(--ink-3); }
+
+.wrap { max-width: 560px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* masthead */
+.mast { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--ground) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.mast .wrap { display: flex; align-items: center; gap: 12px; padding-block: 10px; }
+.mark { font: 900 22px/1 var(--f-display); font-stretch: 125%; letter-spacing: .02em; display: flex; align-items: baseline; gap: 3px; }
+.mark i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-fill); display: inline-block; }
+.stamp { font: 500 12px/1.3 var(--f-data); color: var(--ink-2); margin-left: auto; text-align: right; }
+.iconbtn { border: 1px solid var(--line); background: var(--surface); width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+
+/* tabs */
+.tabs { position: fixed; inset: auto 0 0; z-index: 9; background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.tabs nav { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tabs a { text-decoration: none; display: grid; justify-items: center; gap: 2px; padding: 8px 4px 9px; font: 600 12px/1.1 var(--f-body); color: var(--ink-3); letter-spacing: .02em; }
+.tabs a svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+.tabs a[aria-current="page"] { color: var(--ink); }
+.tabs a[aria-current="page"] svg { stroke: var(--accent); }
+.tabs .badge { font: 600 10px/1 var(--f-data); background: var(--accent-fill); color: #1a1406; border-radius: 9px; padding: 2px 5px; margin-left: 2px; }
+
+main { padding-block: 18px calc(96px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 26px; }
+section.view { display: grid; gap: 22px; }
+
+/* type */
+.lede { font: 800 30px/1.08 var(--f-display); font-stretch: 112%; letter-spacing: -.01em; text-wrap: balance; margin: 0; }
+.lede em { font-style: normal; color: var(--accent); }
+.sub { margin: 6px 0 0; color: var(--ink-2); max-width: 62ch; }
+h2.sec { font: 700 12px/1.2 var(--f-data); text-transform: uppercase; letter-spacing: .09em; color: var(--ink-2); margin: 0; display: flex; align-items: center; gap: 8px; }
+h2.sec .count { color: var(--ink-3); font-weight: 500; }
+h2.sec::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.group { display: grid; gap: 10px; }
+
+/* segmented control */
+.seg { display: inline-flex; background: var(--raise); border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; padding: 5px 13px; border-radius: 999px; font: 600 13px/1.2 var(--f-data); color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.row-between { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+/* decision cards */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); padding: 14px 16px; display: grid; gap: 10px; min-width: 0; }
+.card-top { display: flex; align-items: flex-start; gap: 12px; }
+.tick { font: 800 15px/1.1 var(--f-display); font-stretch: 100%; letter-spacing: .02em; }
+.cat { font: 600 11px/1.2 var(--f-data); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-2); }
+.when { font: 500 12px/1.2 var(--f-data); color: var(--ink-3); }
+.score { margin-left: auto; flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 600 13px/1 var(--f-data); background: conic-gradient(var(--accent-fill) calc(var(--s) * 1%), var(--raise) 0); position: relative; }
+.score::before { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: var(--surface); }
+.score span { position: relative; }
+.headline { font: 600 18px/1.35 var(--f-body); margin: 0; text-wrap: pretty; }
+.why { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 12px/1.2 var(--f-data); padding: 4px 8px; border-radius: 6px; background: var(--raise); color: var(--ink-2); border: 1px solid var(--line); }
+.chip.accent { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font: 600 13px/1.2 var(--f-body); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn.primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.btn.quiet { border-color: transparent; background: transparent; color: var(--ink-2); padding-inline: 6px; }
+.related { font-size: 14px; color: var(--ink-2); display: grid; gap: 4px; padding-left: 12px; border-left: 2px solid var(--line); }
+.related a { text-decoration-color: var(--line); }
+
+/* person block */
+.person { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: start; background: var(--raise); border-radius: 10px; padding: 12px; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--surface); display: grid; place-items: center; font: 800 15px/1 var(--f-display); }
+.person h4 { margin: 0; font: 700 16px/1.25 var(--f-body); }
+.person ul { margin: 6px 0 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); display: grid; gap: 2px; }
+.person p { margin: 8px 0 0; font-size: 14px; }
+.src { font-size: 12px; color: var(--ink-3); display: flex; flex-wrap: wrap; gap: 4px 10px; }
+
+/* results table */
+.rtab { width: 100%; border-collapse: collapse; font-size: 14px; }
+.rtab th { font: 600 11px/1.2 var(--f-data); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); text-align: right; padding: 0 0 6px; }
+.rtab th:first-child, .rtab td:first-child { text-align: left; }
+.rtab td { padding: 6px 0; border-top: 1px solid var(--line); text-align: right; font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+.rtab td:first-child { font-family: var(--f-body); font-weight: 600; }
+.flags { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; font-size: 14px; }
+.flags li { display: flex; gap: 8px; }
+.flags li::before { content: "▲"; font-size: 9px; color: var(--accent); transform: translateY(5px); }
+
+/* compact rows */
+.list { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.item { display: grid; grid-template-columns: 92px minmax(0, 1fr) auto; gap: 10px; padding: 11px 14px; border-top: 1px solid var(--line); align-items: start; }
+.item > div:first-child { min-width: 0; }
+.item .tick { font-size: 13px; overflow-wrap: anywhere; }
+.item:first-child { border-top: 0; }
+.item .t { min-width: 0; }
+.item .t p { margin: 0; font-size: 15px; }
+.item .t .cat { margin-top: 3px; }
+details.fold > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 12px 14px; font-weight: 600; }
+details.fold > summary::-webkit-details-marker { display: none; }
+details.fold > summary::after { content: "+"; margin-left: auto; font: 600 18px/1 var(--f-data); color: var(--ink-3); }
+details.fold[open] > summary::after { content: "–"; }
+.small { font-size: 14px; }
+
+/* alert rows */
+.alert { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; }
+.alert .big { font: 600 20px/1 var(--f-data); font-variant-numeric: tabular-nums; }
+.spark { width: 100%; height: 38px; display: block; }
+.spark .ln { fill: none; stroke: var(--ink-2); stroke-width: 1.5; }
+.spark .ar { fill: var(--raise); }
+.spark .dot { fill: var(--accent-fill); stroke: var(--surface); stroke-width: 2; }
+.empty { padding: 14px 16px; color: var(--ink-2); background: var(--surface); border: 1px dashed var(--line); border-radius: var(--r); font-size: 15px; }
+.cleared { font-size: 14px; color: var(--ink-2); display: flex; gap: 8px; align-items: center; }
+
+/* rules */
+.ctl { display: grid; gap: 6px; }
+.ctl label { display: flex; justify-content: space-between; font-weight: 600; font-size: 15px; }
+.ctl label output { font: 600 15px/1 var(--f-data); color: var(--accent); }
+input[type="range"] { width: 100%; accent-color: var(--accent-fill); }
+.togs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tog { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 10px; font: 500 13px/1.2 var(--f-data); color: var(--ink-2); }
+.tog[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.consequence { font: 700 22px/1.2 var(--f-display); font-stretch: 105%; margin: 0; }
+.map { overflow-x: auto; }
+.map table { border-collapse: separate; border-spacing: 2px; font: 500 11px/1 var(--f-data); }
+.map th { color: var(--ink-3); font-weight: 500; padding: 0 2px; }
+.map th.tk { text-align: left; padding-right: 6px; color: var(--ink-2); white-space: nowrap; }
+.map td { width: 13px; height: 15px; border-radius: 3px; background: var(--raise); padding: 0; }
+.map td.p { background: transparent; box-shadow: inset 0 0 0 1.5px var(--down); }
+.map td.p.pos { box-shadow: inset 0 0 0 1.5px var(--up); }
+.map td.v { background: var(--open); }
+.map td.pv { background: var(--accent-fill); }
+.map td.nov { background: repeating-linear-gradient(135deg, var(--raise) 0 3px, transparent 3px 6px); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend b { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+/* season */
+.progress { height: 8px; background: var(--raise); border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+.progress i { display: block; height: 100%; background: var(--accent-fill); }
+.cal { display: grid; gap: 0; }
+.cal .d { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--line); align-items: baseline; }
+.cal .d:first-child { border-top: 0; }
+.cal .date { font: 600 13px/1.2 var(--f-data); color: var(--ink-2); }
+.cal .today { color: var(--accent); }
+
+/* research */
+.picker { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.co-head { display: grid; gap: 10px; }
+.co-head h1 { font: 800 28px/1.05 var(--f-display); font-stretch: 108%; margin: 0; text-wrap: balance; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.stat { background: var(--surface); padding: 10px 12px; display: grid; gap: 2px; min-width: 0; }
+.stat .k { font: 500 11px/1.2 var(--f-data); text-transform: uppercase; letter-spacing: .07em; color: var(--ink-3); }
+.stat .v { font: 600 18px/1.2 var(--f-data); font-variant-numeric: tabular-nums; }
+.verdict { font: 800 22px/1.2 var(--f-display); font-stretch: 104%; margin: 0; text-wrap: balance; }
+.tally { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font: 600 11px/1.2 var(--f-data); text-transform: uppercase; letter-spacing: .06em; padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
+.pill.good { background: var(--up-soft); color: var(--up); }
+.pill.bad { background: var(--down-soft); color: var(--down); }
+.pill.open { background: var(--open-soft); color: var(--open); }
+.pill.mid { background: var(--accent-soft); color: var(--accent); }
+.promise { padding: 12px 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.promise:first-child { border-top: 0; }
+.promise .hd { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; }
+.promise .m { font-weight: 600; font-size: 15px; }
+.promise .det { font: 500 13px/1.4 var(--f-data); color: var(--ink-2); }
+.drift { width: 100%; height: 46px; display: block; overflow: visible; }
+.drift .axis { stroke: var(--line); stroke-width: 1; }
+.drift .said { fill: var(--surface); stroke: var(--ink-2); stroke-width: 1.5; }
+.drift .last { fill: var(--ink-2); }
+.drift .act { fill: var(--accent-fill); }
+.drift text { font: 500 9.5px var(--f-data); fill: var(--ink-3); }
+.drift text.v { fill: var(--ink); font-weight: 600; }
+.promise details summary { font-size: 13px; color: var(--ink-2); cursor: pointer; }
+.quote { margin: 6px 0 0; font-size: 14px; display: grid; gap: 6px; }
+.quote blockquote { margin: 0; padding-left: 10px; border-left: 2px solid var(--accent-fill); }
+.quote cite { display: block; font: 500 12px/1.3 var(--f-data); color: var(--ink-3); font-style: normal; }
+.theme-h { font: 600 11px/1.2 var(--f-data); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); padding: 10px 14px 0; }
+.bb { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 520px) { .bb { grid-template-columns: 1fr; } }
+.bb .card h3 { margin: 0; font: 800 15px/1.2 var(--f-display); font-stretch: 110%; letter-spacing: .04em; text-transform: uppercase; }
+.bb ol { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 15px; }
+.cite { font: 600 11px/1 var(--f-data); color: var(--accent); text-decoration: none; background: var(--accent-soft); padding: 2px 5px; border-radius: 4px; margin-left: 3px; white-space: nowrap; }
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font: 500 10px var(--f-data); fill: var(--ink-3); }
+.chart .lbl { fill: var(--ink-2); font-weight: 600; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .bar { fill: var(--ink-2); }
+.chart .bar.hi { fill: var(--ink); }
+.chart .bar2 { fill: var(--accent-fill); }
+.chart .bar3 { fill: var(--open); }
+.chart .ln { fill: none; stroke: var(--accent); stroke-width: 2; }
+.chart .pt { fill: var(--accent); }
+.tbl-wrap { overflow-x: auto; }
+.tbl { border-collapse: collapse; font: 500 13px/1.2 var(--f-data); font-variant-numeric: tabular-nums; min-width: 100%; }
+.tbl th, .tbl td { padding: 7px 8px; text-align: right; border-top: 1px solid var(--line); white-space: nowrap; }
+.tbl th:first-child, .tbl td:first-child { text-align: left; font-family: var(--f-body); font-weight: 600; font-size: 14px; position: sticky; left: 0; background: var(--surface); }
+.tbl thead th { border-top: 0; color: var(--ink-3); font-weight: 500; }
+.sig { display: grid; grid-template-columns: 10px 1fr; gap: 10px; padding: 9px 14px; border-top: 1px solid var(--line); font-size: 15px; scroll-margin-top: 80px; }
+.sig:first-child { border-top: 0; }
+.sig i { width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; background: var(--ink-3); }
+.sig i.pos { background: var(--up); } .sig i.neg { background: var(--down); }
+.target-flash { animation: flash 1.4s ease-out; }
+@keyframes flash { from { background: var(--accent-soft); } to { background: transparent; } }
+.range { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; color: var(--ink-2); }
+.range input { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 5px 8px; font: 500 13px var(--f-data); }
+.mix { display: grid; gap: 6px; }
+.mix .r { display: grid; grid-template-columns: minmax(0, 1fr) 46px; gap: 8px; align-items: center; font-size: 14px; }
+.mix .bar { height: 6px; border-radius: 4px; background: var(--ink-2); margin-top: 3px; }
+.ask { display: grid; gap: 8px; }
+.ask form { display: flex; gap: 8px; }
+.ask input { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 9px 14px; }
+.ask .ans { white-space: pre-wrap; font-size: 15px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; }
+.note { font-size: 13px; color: var(--ink-3); }
+code { font: 500 13px var(--f-data); background: var(--raise); padding: 1px 5px; border-radius: 4px; }
+
+/* about sheet */
+dialog { border: 0; padding: 0; max-width: 560px; width: calc(100% - 24px); max-height: calc(100% - 48px); border-radius: 18px; background: var(--surface); color: var(--ink); box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+dialog::backdrop { background: rgba(10, 16, 25, .55); }
+dialog .inner { padding: 20px max(18px, env(safe-area-inset-left, 0px)) 24px; display: grid; gap: 16px; }
+dialog h3 { margin: 0; font: 800 22px/1.15 var(--f-display); font-stretch: 108%; }
+dialog h4 { margin: 0; font: 700 12px/1.2 var(--f-data); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); }
+dialog p, dialog li { font-size: 15px; }
+dialog ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.tier { display: grid; grid-template-columns: 62px 1fr; gap: 10px; font-size: 14px; padding: 8px 0; border-top: 1px solid var(--line); }
+.tier b { font: 600 12px/1.3 var(--f-data); color: var(--accent); }
+.vrow { display: grid; grid-template-columns: 16px 1fr auto; gap: 8px; font-size: 13px; padding: 6px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.vrow .ok { color: var(--up); font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mark" aria-label="FINN">FINN<i></i></div>
+    <div class="stamp" id="stamp"></div>
+    <button class="iconbtn" id="aboutBtn" aria-label="How FINN works and what was checked">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<div class="tabs">
+  <nav aria-label="Sections">
+    <a href="#today" data-tab="today"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7"/></svg><span>Today<span class="badge" id="todayBadge" hidden></span></span></a>
+    <a href="#rules" data-tab="rules"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg><span>Rules</span></a>
+    <a href="#season" data-tab="season"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Season</span></a>
+    <a href="#research-dixon" data-tab="research"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg><span>Research</span></a>
+  </nav>
+</div>
+
+<dialog id="about"><div class="inner" id="aboutInner"></div></dialog>
+
+<script>
+const DATA = /*__FINN_DATA__*/null;
+
+// ==RULES== (mirrors finn/alerts.py; tests/test_parity.py runs both on the same bars)
+function evaluateDay(bars, i, th) {
+  if (i === 0) return null;
+  const b = bars[i], prev = bars[i - 1];
+  const move = prev[1] ? Math.round((b[1] - prev[1]) / prev[1] * 10000) / 100 : null;
+  const win = bars.slice(Math.max(0, i - th.volume_lookback), i).map(x => x[2]).filter(v => v);
+  const avg = win.length >= th.min_lookback ? win.reduce((a, c) => a + c, 0) / win.length : null;
+  const ratio = avg && b[2] ? Math.round(b[2] / avg * 100) / 100 : null;
+  const priceHit = move !== null && Math.abs(move) >= th.price_move_pct;
+  const volumeHit = ratio !== null && ratio >= th.volume_multiple;
+  if (!priceHit && !volumeHit) return null;
+  return { date: b[0], close: b[1], move_pct: move, vol: b[2], avg_vol: avg ? Math.round(avg) : null, vol_ratio: ratio,
+           price_hit: priceHit, volume_hit: volumeHit, lookback_used: win.length,
+           kind: priceHit && volumeHit ? "price+volume" : priceHit ? "price" : "volume" };
+}
+function scanBars(ticker, bars, th, start, end) {
+  const out = [];
+  bars.forEach((b, i) => { if (b[0] >= start && b[0] <= end) { const t = evaluateDay(bars, i, th); if (t) out.push({ ticker, ...t }); } });
+  return out;
+}
+// ==/RULES==
+
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("finn:" + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("finn:" + k, JSON.stringify(v)); } catch {} },
+};
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const pd = iso => { const [y, m, d] = iso.slice(0, 10).split("-").map(Number); return new Date(y, m - 1, d); };
+const isoOf = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const day = iso => { const d = pd(iso); return `${DOW[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`; };
+const shortDay = iso => { const d = pd(iso); return `${d.getDate()} ${MON[d.getMonth()]}`; };
+const cr = v => v == null ? "—" : "₹" + Number(v).toLocaleString("en-IN", { maximumFractionDigits: 0 }) + " cr";
+const inr = v => v == null ? "—" : Number(v).toLocaleString("en-IN", { maximumFractionDigits: v < 100 ? 2 : 0 });
+const sgn = (v, d = 1) => v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d) + "%";
+const cls = v => v == null ? "" : v > 0 ? "up" : v < 0 ? "down" : "";
+const vol = v => v == null ? "—" : v >= 1e7 ? (v / 1e6).toFixed(1) + "M" : v >= 1e6 ? (v / 1e6).toFixed(2) + "M" : (v / 1e3).toFixed(0) + "K";
+const NAME = Object.fromEntries(DATA.portfolio.map(p => [p.ticker, p]));
+const CAT = { results: "Results", "M&A": "M&A", fund_raise: "Fund raise", management_change: "Mgmt change", litigation: "Legal / regulatory",
+  insider_trading: "Large-holder trade", earnings_call: "Earnings call", investor_meetings: "Investor meeting", credit_rating: "Credit rating",
+  dividend: "Dividend", bonus_split: "Bonus / split", capex: "Capex", press_release: "News / orders", postal_ballot: "Postal ballot",
+  agm_egm: "AGM / EGM", pledging: "Pledge", unclassified: "Routine" };
+
+const NOW = pd(DATA.generated_at);
+const DEFAULT_TH = DATA.thresholds;
+let TH = { ...DEFAULT_TH, ...store.get("th", {}) };
+let WINDOW = store.get("window", 1);
+let RANGE = store.get("range", null);
+let DONE = new Set(store.get("done", []));
+
+function allTriggers(th) {
+  const end = DATA.eod, start = isoOf(new Date(pd(DATA.eod).getTime() - 30 * 864e5));
+  const out = [];
+  for (const [t, bars] of Object.entries(DATA.bars)) out.push(...scanBars(t, bars, th, start, end));
+  return out.sort((a, b) => a.date < b.date ? 1 : a.date > b.date ? -1 : Math.abs(b.move_pct || 0) - Math.abs(a.move_pct || 0));
+}
+const cutoff = () => isoOf(new Date(NOW.getTime() - WINDOW * 864e5));
+function windowBounds() {
+  if (WINDOW === "custom" && RANGE) return [RANGE.from, RANGE.to];
+  return [cutoff(), isoOf(NOW)];
+}
+
+function spark(t, mark) {
+  const bars = DATA.bars[t] || [];
+  const pts = bars.slice(-15);
+  if (pts.length < 2) return "";
+  const W = 240, H = 38, ys = pts.map(p => p[1]), lo = Math.min(...ys), hi = Math.max(...ys), sp = hi - lo || 1;
+  const xy = pts.map((p, i) => [i / (pts.length - 1) * (W - 6) + 3, H - 4 - (p[1] - lo) / sp * (H - 8)]);
+  const line = xy.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+  const mi = pts.findIndex(p => p[0] === mark);
+  const m = mi >= 0 ? xy[mi] : xy[xy.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path class="ar" d="${line}L${xy.at(-1)[0]} ${H}L${xy[0][0]} ${H}Z"/><path class="ln" d="${line}" vector-effect="non-scaling-stroke"/><circle class="dot" cx="${m[0]}" cy="${m[1]}" r="3.5" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+// ---------------- TODAY ----------------
+function isDecision(f) { return f.score >= TH.materiality_floor && TH.alert_categories.includes(f.category); }
+
+function personBlock(p) {
+  const initials = p.incoming.split(" ").map(w => w[0]).slice(0, 2).join("");
+  return `<div class="person"><div class="avatar" aria-hidden="true">${esc(initials)}</div><div>
+    <h4>${esc(p.incoming)} <span class="muted small">· ${esc(p.role)}</span></h4>
+    <ul>${p.background.map(b => `<li>${esc(b)}</li>`).join("")}</ul>
+    <p>${esc(p.why_it_matters)}</p>
+    <p class="small muted">Replaces ${esc(p.outgoing)}${p.term ? " · term " + esc(p.term) : ""}${p.approvals ? " · " + esc(p.approvals) : ""}</p>
+    ${p.sources?.length ? `<div class="src">Background from ${p.sources.map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title.split(" — ")[0])}</a>`).join("")}</div>` : ""}
+  </div></div>`;
+}
+
+function autoPerson(p) {
+  const who = p.incoming ? `<b>In:</b> ${esc(p.incoming)}` : "";
+  const out = p.outgoing ? `<b>Out:</b> ${esc(p.outgoing)}` : "";
+  const gap = !p.incoming && p.outgoing ? " · no successor named in the filing" : "";
+  return `<div class="person" style="grid-template-columns:1fr"><div class="small">${[who, out].filter(Boolean).join(" · ")} · ${esc(p.role)} (${esc(p.action)})${gap}
+    ${p.background?.length ? `<ul>${p.background.map(b => `<li>${esc(b)}</li>`).join("")}</ul>` : `<div class="faint" style="margin-top:4px">Names read from the filing text automatically.${p.incoming ? " Background lookup runs for senior roles when a search key is set." : ""}</div>`}</div></div>`;
+}
+
+function resultsTable(c, kind) {
+  const rows = c.lines.map(l => l.value == null
+    ? `<tr><td>${esc(l.name)}</td><td colspan="3" class="faint" style="text-align:right">${esc(l.na || "—")}</td></tr>`
+    : `<tr><td>${esc(l.name)}</td><td>${inr(l.value)}</td><td class="${cls(l.qoq)}">${sgn(l.qoq)}</td><td class="${cls(l.yoy)}">${sgn(l.yoy)}</td></tr>`).join("");
+  const m = c.margin ? `<p class="small muted" style="margin:0">EBITDA margin <span class="mono">${c.margin.now}%</span> · <span class="mono">${c.margin.prev}%</span> last quarter · <span class="mono">${c.margin.yago}%</span> a year ago</p>` : "";
+  return `<table class="rtab"><thead><tr><th>₹ cr · ${esc(c.fq.replace("FY", " FY"))}</th><th>Value</th><th>QoQ</th><th>YoY</th></tr></thead><tbody>${rows}</tbody></table>${m}
+    ${c.flags.length ? `<ul class="flags">${c.flags.map(f => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}`;
+}
+
+function decisionCard(f) {
+  const n = NAME[f.ticker] || { name: f.ticker };
+  const head = f.so_what || f.subtitle || f.title;
+  const why = (f.reasons || []).map(r => `<span class="chip">${esc(r)}</span>`).join("");
+  const res = f.results_card && DATA.results[f.ticker] ? resultsTable(DATA.results[f.ticker], n.kind) : "";
+  return `<article class="card" id="f-${f.id}">
+    <div class="card-top"><div><div class="tick">${esc(f.ticker)} <span class="when">· ${day(f.date)}</span></div>
+      <div class="cat">${esc(CAT[f.category] || f.category)} · ${esc(f.title)}</div></div>
+      <div class="score" style="--s:${f.score}" title="Materiality score ${f.score}/100"><span>${f.score}</span></div></div>
+    <p class="headline">${esc(head)}</p>
+    ${f.person ? personBlock(f.person) : f.person_auto ? autoPerson(f.person_auto) : ""}
+    ${res}
+    ${why ? `<div class="why">${why}</div>` : ""}
+    ${f.related?.length ? `<div class="related">${f.related.map(r => `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.title)}</a>`).join("")}</div>` : ""}
+    <div class="actions"><a class="btn" href="${esc(f.url)}" target="_blank" rel="noopener">Open filing ↗</a>
+      ${f.results_card ? `<a class="btn quiet" href="#season">Season view</a>` : ""}
+      <button class="btn quiet" data-done="${f.id}" style="margin-left:auto">Mark done ✓</button></div>
+  </article>`;
+}
+
+function renderToday() {
+  const [from, to] = windowBounds();
+  const fs = DATA.filings.filter(f => f.date >= from && f.date <= to);
+  const trig = allTriggers(TH).filter(t => t.date >= from && t.date <= to);
+  const dec = fs.filter(f => isDecision(f) && !DONE.has(f.id));
+  const glance = fs.filter(f => !isDecision(f) && f.score >= 40 && !DONE.has(f.id));
+  const routine = fs.filter(f => !isDecision(f) && f.score < 40);
+  const done = fs.filter(f => DONE.has(f.id));
+  const trigOpen = trig.filter(t => !DONE.has("t:" + t.ticker + t.date));
+  const need = dec.length + trigOpen.length;
+  const windows = [[1, "24h"], [3, "3d"], [7, "7d"], [30, "30d"], ["custom", "Custom"]];
+  const minDate = DATA.filings.reduce((m, f) => f.date < m ? f.date : m, isoOf(NOW));
+
+  const lede = need === 0 ? `Nothing needs you${WINDOW === 1 ? " today" : ""}.`
+    : `<em>${need}</em> thing${need > 1 ? "s" : ""} need${need > 1 ? "" : "s"} you${WINDOW === 1 ? " today" : WINDOW === "custom" ? ` between ${shortDay(from)} and ${shortDay(to)}` : ""}.`;
+  const sub = `From ${fs.length} filing${fs.length === 1 ? "" : "s"} across ${new Set(fs.map(f => f.ticker)).size} holdings and end-of-day prices for all 15. ${routine.length} routine item${routine.length === 1 ? "" : "s"} folded away.`;
+
+  $("#todayBadge").hidden = need === 0;
+  $("#todayBadge").textContent = need;
+
+  return `<section class="view" aria-labelledby="todayH">
+    <div class="row-between"><div class="seg" role="group" aria-label="Time window">${windows.map(([d, l]) => `<button aria-pressed="${WINDOW === d}" data-win="${d}">${l}</button>`).join("")}</div>
+      <span class="when">EOD ${shortDay(DATA.eod)}</span></div>
+    ${WINDOW === "custom" ? `<div class="range"><label for="rangeFrom">From</label><input type="date" id="rangeFrom" min="${minDate}" max="${isoOf(NOW)}" value="${from}">
+      <label for="rangeTo">to</label><input type="date" id="rangeTo" min="${minDate}" max="${isoOf(NOW)}" value="${to}"></div>` : ""}
+    <div><h1 class="lede" id="todayH">${lede}</h1><p class="sub">${sub}</p></div>
+
+    ${dec.length ? `<div class="group"><h2 class="sec">Needs a decision <span class="count">${dec.length}</span></h2>${dec.map(decisionCard).join("")}</div>` : ""}
+
+    <div class="group"><h2 class="sec">Moved past your rules <span class="count">${trigOpen.length}</span></h2>
+      ${trigOpen.length ? `<div class="list">${trigOpen.map(t => `<div class="item">
+          <div><div class="tick">${esc(t.ticker)}</div><div class="when">${shortDay(t.date)}</div></div>
+          <div class="t alert"><div>${spark(t.ticker, t.date)}</div>
+            <div style="text-align:right"><div class="big ${cls(t.move_pct)}">${sgn(t.move_pct, 2)}</div>
+              <div class="when">${t.vol_ratio ? `vol ${t.vol_ratio.toFixed(1)}× avg` : NAME[t.ticker]?.has_volume === false ? "no volume feed" : `vol ${t.vol_ratio ?? "—"}`}</div></div>
+            <p class="small muted" style="grid-column:1/-1">Close ₹${inr(t.close)} · ${t.kind === "price+volume" ? "price and volume" : t.kind} rule${t.price_hit && t.volume_hit ? "s" : ""} tripped${t.vol ? ` · ${vol(t.vol)} shares vs ${vol(t.avg_vol)} usual` : ""}</p></div>
+          <button class="btn quiet" data-done="${esc("t:" + t.ticker + t.date)}" aria-label="Mark ${esc(t.ticker)} move done">✓</button></div>`).join("")}</div>`
+        : `<div class="empty">No holding crossed ±${TH.price_move_pct}% or ${TH.volume_multiple}× volume in this window. <a href="#rules">Adjust rules</a></div>`}
+    </div>
+
+    ${glance.length ? `<div class="group"><h2 class="sec">Worth a glance <span class="count">${glance.length}</span></h2><div class="list">
+      ${glance.map(f => `<div class="item"><div><div class="tick">${esc(f.ticker)}</div><div class="when">${shortDay(f.date)}</div></div>
+        <div class="t"><p>${esc(f.so_what || f.subtitle || f.title)}</p><div class="cat">${esc(CAT[f.category])} · score ${f.score}</div></div>
+        <a class="btn quiet" href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Open ${esc(f.ticker)} filing">↗</a></div>`).join("")}
+    </div></div>` : ""}
+
+    ${routine.length ? `<details class="list fold"><summary>Routine paperwork <span class="count faint mono">${routine.length}</span></summary>
+      ${routine.map(f => `<div class="item"><div><div class="tick">${esc(f.ticker)}</div><div class="when">${shortDay(f.date)}</div></div>
+        <div class="t"><p class="small">${esc(f.title)}</p><div class="cat">${esc(CAT[f.category])}</div></div>
+        <a class="btn quiet" href="${esc(f.url)}" target="_blank" rel="noopener" aria-label="Open filing">↗</a></div>`).join("")}</details>` : ""}
+
+    ${done.length || DONE.size ? `<div class="cleared">${done.length} cleared in this window <button class="btn quiet" id="undoDone">Bring back</button></div>` : ""}
+
+    ${upcomingBlock(3)}
+  </section>`;
+}
+
+function upcomingBlock(limit) {
+  const up = DATA.upcoming.filter(u => u.date >= isoOf(NOW)).slice(0, limit ?? 99);
+  if (!up.length) return "";
+  const today = isoOf(NOW);
+  return `<div class="group"><h2 class="sec">Coming up <span class="count">${up.length}</span></h2><div class="list cal">
+    ${up.map(u => `<div class="d"><div class="date ${u.date === today ? "today" : ""}">${u.date === today ? "Today" : day(u.date)}</div>
+      <div><span class="tick">${esc(u.ticker)}</span> <span class="muted">${esc(u.what)}</span>
+      ${u.ticker === "DIXON" && u.what === "Results" ? `<div class="small muted">FINN will score Dixon's 9–9.2 mn unit Q2 promise against these numbers. <a href="#research-dixon">See the ledger</a></div>` : ""}</div></div>`).join("")}
+  </div></div>`;
+}
+
+// ---------------- RULES ----------------
+function renderRules() {
+  const trig = allTriggers(TH);
+  const sessions = [...new Set(Object.values(DATA.bars).flatMap(b => b.map(x => x[0])))].sort().slice(-20);
+  const inRange = trig.filter(t => t.date >= sessions[0]);
+  const perDay = (inRange.length / sessions.length).toFixed(1);
+  const byKey = Object.fromEntries(inRange.map(t => [t.ticker + t.date, t]));
+  const tks = DATA.portfolio.map(p => p.ticker);
+  const decisions = DATA.filings.filter(isDecision).length;
+  const cats = ["results", "M&A", "management_change", "litigation", "credit_rating", "fund_raise", "insider_trading", "capex", "press_release"];
+
+  return `<section class="view">
+    <div><h1 class="lede">What counts as <em>unusual</em></h1>
+      <p class="sub">You set the bar; FINN watches every holding against it after each close. Changes apply instantly to Today and replay the last 20 sessions below.</p></div>
+
+    <div class="card">
+      <div class="ctl"><label for="volm">Volume spike <output>${TH.volume_multiple.toFixed(1)}× avg</output></label>
+        <input type="range" id="volm" min="1.2" max="5" step="0.1" value="${TH.volume_multiple}" data-th="volume_multiple">
+        <span class="note">Against the trailing ${TH.volume_lookback}-session average (fewer if history is short; needs at least ${TH.min_lookback}).</span></div>
+      <div class="ctl"><label for="pmove">Daily price move <output>±${TH.price_move_pct.toFixed(1)}%</output></label>
+        <input type="range" id="pmove" min="1" max="8" step="0.5" value="${TH.price_move_pct}" data-th="price_move_pct"></div>
+      <div class="ctl"><label for="floor">Filing materiality floor <output>${TH.materiality_floor}</output></label>
+        <input type="range" id="floor" min="40" max="95" step="5" value="${TH.materiality_floor}" data-th="materiality_floor">
+        <span class="note">Score 0–100 from filing type, role (CEO vs. nominee director) and deal size against market cap.</span></div>
+      <div class="ctl"><label>Filing types that can interrupt you</label>
+        <div class="togs">${cats.map(c => `<button class="tog" aria-pressed="${TH.alert_categories.includes(c)}" data-cat="${esc(c)}">${esc(CAT[c])}</button>`).join("")}</div></div>
+      <div class="actions"><button class="btn" id="resetTh">Reset to defaults</button></div>
+    </div>
+
+    <div class="group"><h2 class="sec">Replay · last 20 sessions</h2>
+      <p class="consequence">${inRange.length} price/volume ping${inRange.length === 1 ? "" : "s"} <span class="muted" style="font-weight:600">≈ ${perDay} a day</span>, plus ${decisions} filing${decisions === 1 ? "" : "s"} over your floor this month.</p>
+      <div class="card"><div class="map"><table aria-label="Trigger map: holdings by session">
+        <thead><tr><th></th>${sessions.map((s, i) => `<th>${i % 5 === 0 || i === sessions.length - 1 ? pd(s).getDate() : ""}</th>`).join("")}</tr></thead>
+        <tbody>${tks.map(t => `<tr><th class="tk" scope="row">${esc(t)}</th>${sessions.map(s => {
+          const x = byKey[t + s]; const has = (DATA.bars[t] || []).some(b => b[0] === s);
+          const c = !has ? "nov" : !x ? "" : x.kind === "price+volume" ? "pv" : x.kind === "volume" ? "v" : "p" + (x.move_pct > 0 ? " pos" : "");
+          return `<td class="${c}" title="${esc(t)} ${s}${x ? ` · ${x.kind} ${sgn(x.move_pct, 2)}${x.vol_ratio ? " · " + x.vol_ratio + "×" : ""}` : ""}"></td>`; }).join("")}</tr>`).join("")}</tbody></table></div>
+        <div class="legend"><span><b style="box-shadow:inset 0 0 0 1.5px var(--up)"></b>price up</span><span><b style="box-shadow:inset 0 0 0 1.5px var(--down)"></b>price down</span>
+          <span><b style="background:var(--open)"></b>volume</span><span><b style="background:var(--accent-fill)"></b>both</span>
+          <span><b style="background:repeating-linear-gradient(135deg,var(--line) 0 3px,transparent 3px 6px)"></b>no data</span></div>
+        <p class="note" style="margin:0">POLYCAB, HAL and CDSL have prices but no volume in this snapshot, so only the price rule watches them.</p>
+      </div></div>
+  </section>`;
+}
+
+// ---------------- SEASON ----------------
+function renderSeason() {
+  const rep = Object.entries(DATA.results).filter(([, c]) => c.reported);
+  const total = DATA.portfolio.length;
+  return `<section class="view">
+    <div><h1 class="lede">${esc(rep[0]?.[1].fq.replace("FY", " FY") || "Results")} season: <em>${rep.length}</em> of ${total} reported</h1>
+      <p class="sub">A first cut of each filing: revenue, EBITDA, PBT and PAT against last quarter and the same quarter last year, with what to look at.</p>
+      <div class="progress" style="margin-top:12px" role="img" aria-label="${rep.length} of ${total} reported"><i style="width:${rep.length / total * 100}%"></i></div></div>
+    ${upcomingBlock()}
+    <div class="group"><h2 class="sec">Reported <span class="count">${rep.length}</span></h2>
+      ${rep.map(([t, c]) => `<article class="card"><div class="card-top"><div><div class="tick">${esc(t)}</div>
+        <div class="cat">${esc(NAME[t]?.name || t)} · vs ${esc(c.vs_q)} and ${esc(c.vs_y)}</div></div></div>
+        ${resultsTable(c, NAME[t]?.kind)}</article>`).join("")}
+      <p class="note">Consolidated figures from the results filings via screener.in. PAT is before minority interest; for TCS that is ₹13,934 cr against ₹13,884 cr attributable. EBITDA here excludes other income; TCS's own "operating margin" also deducts depreciation (24.0%).</p>
+    </div>
+  </section>`;
+}
+
+// ---------------- RESEARCH ----------------
+const STATUS = {
+  met: "good", beat: "good", ahead: "good", "on track": "good", delivered: "good", "on schedule": "good", raised: "good", reiterated: "good",
+  missed: "bad", behind: "bad", slipped: "bad", "walked back": "bad", "delivered late": "bad", "not yet": "bad",
+  marginal: "mid", open: "open",
+};
+
+function driftSvg(p, calls) {
+  const ids = calls.map(c => c.id);
+  if (ids.length < 2) return "";
+  const W = 320, H = 46, x = i => 14 + i * (W - 28) / (ids.length - 1);
+  const said = new Map(p.said.map(s => [s.call, s]));
+  const val = s => s.due ? s.due.replace("FY", "") : s.lo != null || s.hi != null ? (s.lo != null && s.hi != null && s.lo !== s.hi ? `${short(s.lo)}–${short(s.hi)}` : short(s.lo ?? s.hi)) : s.text ? "words" : "—";
+  let g = `<line class="axis" x1="${x(0)}" x2="${x(ids.length - 1)}" y1="22" y2="22"/>`;
+  ids.forEach((id, i) => {
+    const s = said.get(id);
+    g += `<text x="${x(i)}" y="42" text-anchor="middle">${esc(id.replace("FY", " "))}</text>`;
+    if (s) g += `<circle class="said ${id === p.said.at(-1).call ? "last" : ""}" cx="${x(i)}" cy="22" r="5"/><text class="v" x="${x(i)}" y="11" text-anchor="middle">${esc(val(s))}</text>`;
+  });
+  if (p.actual?.call && ids.includes(p.actual.call)) {
+    const i = ids.indexOf(p.actual.call);
+    g += `<rect class="act" x="${x(i) - 4}" y="27" width="8" height="8" transform="rotate(45 ${x(i)} 31)"/>`;
+  }
+  return `<svg class="drift" viewBox="0 0 ${W} ${H}" role="img" aria-label="What was said on each call">${g}</svg>`;
+}
+const short = v => v >= 1000 ? (v / 1000).toFixed(v % 1000 ? 1 : 0) + "k" : String(v);
+
+function barChart(years, series, line, opts = {}) {
+  const W = 340, H = 170, L = 36, R = 32, T = 16, B = 22, n = years.length;
+  const mx = Math.max(...series.flatMap(s => s.values).filter(v => v != null), 0), mn = Math.min(0, ...series.flatMap(s => s.values).filter(v => v != null));
+  const y = v => T + (mx - v) / ((mx - mn) || 1) * (H - T - B);
+  const band = (W - L - R) / n, bw = Math.min(26, band * .7 / series.length);
+  let g = "";
+  [0, .5, 1].forEach(f => { const v = mn + (mx - mn) * f; g += `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 4}" y="${y(v) + 3}" text-anchor="end">${short(Math.round(v))}</text>`; });
+  years.forEach((yr, i) => {
+    const cx = L + band * i + band / 2;
+    series.forEach((s, k) => { const v = s.values[i]; if (v == null) return; const x0 = cx - bw * series.length / 2 + k * bw;
+      g += `<rect class="${s.cls}${i === n - 1 && series.length === 1 ? " hi" : ""}" x="${x0 + 1}" y="${Math.min(y(v), y(0))}" width="${bw - 2}" height="${Math.max(1, Math.abs(y(v) - y(0)))}" rx="2"><title>${esc(s.name)} ${esc(yr)}: ${inr(v)}</title></rect>`; });
+    g += `<text x="${cx}" y="${H - 6}" text-anchor="middle">${esc(yr)}</text>`;
+  });
+  if (line) {
+    const lv = line.values.filter(v => v != null), lmx = Math.max(...lv) * 1.15, lmn = 0;
+    const ly = v => T + (lmx - v) / (lmx - lmn) * (H - T - B);
+    const pts = line.values.map((v, i) => [L + band * i + band / 2, ly(v)]);
+    g += `<path class="ln" d="${pts.map((p, i) => (i ? "L" : "M") + p[0] + " " + p[1]).join("")}"/>`;
+    pts.forEach((p, i) => g += `<circle class="pt" cx="${p[0]}" cy="${p[1]}" r="${i === pts.length - 1 ? 3.5 : 2.5}"/>`);
+    g += `<text class="lbl" x="${pts.at(-1)[0] + 6}" y="${pts.at(-1)[1] + 3}">${line.values.at(-1)}%</text>`;
+  }
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.label || "")}">${g}</svg>`;
+}
+
+function checksBlock(c) {
+  const a = c.auditor || {}, rp = c.rpt_approvals || {}, cl = c.contingent_liabilities;
+  return `<div class="group"><h2 class="sec">Auditor & related parties</h2><div class="list">
+    ${a.name ? `<div class="promise"><div class="hd"><div><div class="m">${esc(a.name)}</div><div class="det">${esc(a.document)}</div></div>
+      <span class="pill ${a.opinion === "unmodified" ? "good" : "bad"}">${esc(a.opinion)}</span></div>
+      ${(a.attention || []).map(x => `<p class="small" style="margin:0"><b>Draws attention to ${esc(x.topic)}:</b> ${esc(x.detail)} That is <span class="mono">${x.pct_equity}%</span> of net worth (<span class="mono">${x.net_pct_equity}%</span> net of the customer payable).</p>`).join("")}
+      ${a.unreviewed ? `<p class="small muted" style="margin:0">${a.unreviewed.count} subsidiaries were not reviewed by this auditor: ${cr(a.unreviewed.revenue_cr)} of revenue (${a.unreviewed.revenue_share_pct}%) and ${cr(a.unreviewed.pat_cr)} of profit.</p>` : ""}
+      <a class="small" href="${esc(a.url)}" target="_blank" rel="noopener">Results filing ↗</a></div>` : ""}
+    ${(rp.items || []).length ? `<div class="promise"><div class="m">Related-party approvals sought at the AGM</div>
+      ${rp.items.map(x => `<p class="small" style="margin:0"><b>${esc(x.counterparty)}</b> ← ${esc(x.entity)}: ${esc(x.nature)}. Limit <span class="mono">${cr(x.limit_cr_per_year)}</span>/yr for ${esc(x.period)} = <span class="mono">${x.pct_of_turnover}%</span> of Dixon's turnover; last year's actual <span class="mono">${cr(x.last_year_actual_cr)}</span> (${x.headroom_x}× headroom). This buyer takes ${x.share_of_entity_turnover_pct}% of the subsidiary's sales.</p>`).join("")}
+      ${rp.other_items?.length ? `<p class="small muted" style="margin:0">Also on the agenda: ${rp.other_items.map(esc).join("; ")}.</p>` : ""}
+      ${rp.pay_items?.length ? `<p class="small muted" style="margin:0">Pay resolutions: ${rp.pay_items.map(esc).join("; ")}.</p>` : ""}
+      <a class="small" href="${esc(rp.url)}" target="_blank" rel="noopener">${esc(rp.document)} ↗</a></div>` : ""}
+    ${cl ? `<div class="promise"><div class="hd"><div class="m">Contingent liabilities</div><span class="pill open">${esc(cl.status)}</span></div><p class="small muted" style="margin:0">${esc(cl.why)}</p></div>` : ""}
+  </div></div>`;
+}
+
+function renderResearch(t) {
+  const r = DATA.research[t];
+  if (!r) return `<section class="view"><div class="empty">No research for ${esc(t)} in this build.</div></section>`;
+  const s = r.snapshot, L = r.ledger, tr = r.trajectory, bs = r.balance_sheet, cash = r.cash;
+  const picks = Object.keys(DATA.research);
+  const tally = Object.entries(L.counts || {}).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<span class="pill ${STATUS[k]}">${v} ${esc(k)}</span>`).join("");
+  const themes = [...new Set((L.items || []).map(i => i.theme))];
+  const ids = new Set([...(r.signals || []).map(x => x.id), ...(L.items || []).map(x => x.id)]);
+  const cite = c => ids.has(c) ? `<a class="cite" href="#research-${t.toLowerCase()}" data-jump="${esc(c)}">${esc(c)}</a>` : "";
+  const yrs = tr.years;
+
+  return `<section class="view">
+    <div class="picker">${picks.map(p => `<a class="tog" style="text-decoration:none" aria-pressed="${p === t}" href="#research-${p.toLowerCase()}">${esc(p)}</a>`).join("")}
+      <span class="note" style="margin-left:auto">Any NSE ticker: <code>finn research SYMBOL</code></span></div>
+
+    <div class="co-head"><div><div class="cat">${esc(r.about)}</div><h1>${esc(r.name)}</h1></div>
+      <div class="stats">
+        <div class="stat"><span class="k">Revenue TTM</span><span class="v">${cr(s.revenue_ttm)}</span></div>
+        <div class="stat"><span class="k">Op. margin</span><span class="v">${s.opm_ttm}%</span></div>
+        <div class="stat"><span class="k">PAT TTM</span><span class="v">${cr(s.pat_ttm)}</span></div>
+        <div class="stat"><span class="k">ROCE</span><span class="v">${s.roce}%</span></div>
+        <div class="stat"><span class="k">Debt / equity</span><span class="v">${s.de}</span></div>
+        <div class="stat"><span class="k">P/E</span><span class="v">${s.pe}×</span></div>
+      </div></div>
+
+    <div class="group"><h2 class="sec">Promised vs delivered</h2>
+      ${L.items?.length ? `<p class="verdict">${esc(L.pattern || L.headline)}</p>
+        <p class="sub" style="margin:0">${esc(L.headline)} — across ${L.calls.length} earnings calls, ${shortDay(L.calls[0].date)} to ${shortDay(L.calls.at(-1).date)}. Each row shows what was said on each call (○), the latest statement (●) and the outcome (◆).</p>
+        <div class="tally">${tally}</div>
+        <div class="list">${themes.map(th => `<div class="theme-h">${esc(th)}</div>${L.items.filter(i => i.theme === th).map(i => `<div class="promise" id="x-${esc(i.id)}">
+          <div class="hd"><div><div class="m">${esc(i.metric)}</div><div class="det">${esc(i.detail)}${i.gap_pct != null && i.kind !== "restated" ? ` · ${i.gap_pct > 0 ? "+" : ""}${i.gap_pct}%` : ""}</div></div>
+            <span class="pill ${STATUS[i.status]}">${esc(i.status)}${i.slip_q && i.status !== "delivered late" ? ` ${i.slip_q}q` : ""}</span></div>
+          ${driftSvg(i, L.calls)}
+          <details><summary>What they said <span class="faint mono">${esc(i.id)}</span></summary><div class="quote">
+            ${i.said_on.map(q => `<blockquote>“${esc(q.quote)}”<cite>${esc(q.speaker)} · ${q.date ? shortDay(q.date) + " " + pd(q.date).getFullYear() : esc(q.call)} call${q.note ? " · " + esc(q.note) : ""}</cite></blockquote>`).join("")}
+            ${i.actual?.source ? `<cite>Outcome: ${esc(i.actual.source)}</cite>` : i.check_on ? `<cite>Check due ${day(i.check_on)}: ${esc(i.check_note || "")}</cite>` : ""}
+          </div></details></div>`).join("")}`).join("")}</div>
+        <p class="note">Statements are extracted from call transcripts by the model; every status is arithmetic on those statements (5% grace on numbers, fiscal-quarter counting on dates).</p>`
+      : `<div class="empty">${esc(L.note || "No earnings-call guidance on file.")}</div>`}
+    </div>
+
+    ${r.bull_bear ? `<div class="group"><h2 class="sec">Bull and bear, from the filings only</h2><div class="bb">
+      <div class="card"><h3 class="up">Bull</h3><ol>${r.bull_bear.bull.map(b => `<li>${esc(b.point)} ${b.cites.map(cite).join("")}</li>`).join("")}</ol></div>
+      <div class="card"><h3 class="down">Bear</h3><ol>${r.bull_bear.bear.map(b => `<li>${esc(b.point)} ${b.cites.map(cite).join("")}</li>`).join("")}</ol></div>
+    </div></div>` : ""}
+
+    <div class="group"><h2 class="sec">What the statements show</h2>
+      <div class="list">${r.signals.map(x => `<div class="sig" id="x-${esc(x.id)}"><i class="${x.tone}" aria-label="${x.tone}"></i><div>${esc(x.text)} <span class="faint mono small">${esc(x.id)}</span></div></div>`).join("")}</div></div>
+
+    ${r.filing_checks ? checksBlock(r.filing_checks) : ""}
+
+    <div class="group"><h2 class="sec">Trajectory · ₹ cr</h2><div class="card">
+      ${barChart(yrs, [{ name: "Revenue", values: tr.lines.Sales.series, cls: "bar" }], { values: tr.opm }, { label: "Revenue bars with operating margin line" })}
+      <div class="legend"><span><b style="background:var(--ink-2)"></b>Revenue</span><span><b style="background:var(--accent)"></b>Operating margin %</span>
+        <span class="mono">Revenue ${tr.lines.Sales.cagr}% CAGR · PAT ${tr.lines["Net Profit"].cagr ?? "—"}% CAGR</span></div></div></div>
+
+    <div class="group"><h2 class="sec">Cash quality · do profits turn into cash?</h2><div class="card">
+      ${barChart(yrs, [{ name: "PAT", values: r.trajectory.lines["Net Profit"].series, cls: "bar" }, { name: "Operating cash", values: cash.cfo, cls: "bar2" }, { name: "Free cash", values: cash.fcf, cls: "bar3" }], null, { label: "Profit, operating cash and free cash by year" })}
+      <div class="legend"><span><b style="background:var(--ink-2)"></b>PAT</span><span><b style="background:var(--accent-fill)"></b>Operating cash</span><span><b style="background:var(--open)"></b>Free cash</span></div>
+      <p class="small" style="margin:0"><b>${cash.cum_cfo_to_pat}%</b> of ${yrs.length}-year profit arrived as operating cash; <b>${cash.cum_fcf_to_pat}%</b> was left after capex. Verdict: ${esc(cash.verdict)}.</p></div></div>
+
+    <div class="group"><h2 class="sec">Balance sheet & working capital</h2><div class="card"><div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th></th>${yrs.map(y => `<th>${esc(y)}</th>`).join("")}</tr></thead><tbody>
+      ${[["Debt / equity", bs.de], ["Debtor days", bs.debtor_days], ["Inventory days", bs.inventory_days], ["Payable days", bs.payable_days], ["Working-capital days", bs.wc_days], ["ROCE %", bs.roce], ["Sales / fixed assets", bs.asset_turn]]
+        .filter(([, v]) => v.some(x => x != null)).map(([k, v]) => `<tr><td>${k}</td>${v.map(x => `<td>${x == null ? "—" : x}</td>`).join("")}</tr>`).join("")}
+      </tbody></table></div></div></div>
+
+    ${r.segments ? `<div class="group"><h2 class="sec">${esc(r.segments.label)}</h2><div class="card mix">
+      ${Object.entries(r.segments.mix).map(([k, v]) => `<div class="r"><div>${esc(k)}<div class="bar" style="width:${v / Math.max(...Object.values(r.segments.mix)) * 100}%"></div></div><span class="mono" style="text-align:right">${v}%</span></div>`).join("")}</div></div>` : ""}
+
+    <div class="group ask" id="askBox" hidden><h2 class="sec">Ask about ${esc(t)}</h2>
+      <form id="askForm"><input id="askQ" placeholder="e.g. Which promises slipped, and by how much?" autocomplete="off" aria-label="Question about ${esc(t)}"><button class="btn primary" id="askGo">Ask</button></form>
+      <div class="ans" id="askAns" hidden></div>
+      <p class="note">Answers use only the data on this page (filings, statements and call extracts). Uses your Claude account.</p></div>
+  </section>`;
+}
+
+// ---------------- ABOUT ----------------
+function renderAbout() {
+  const v = DATA.validation || [], ok = v.filter(x => x.pass).length, e = DATA.engine.triage;
+  return `<h3>How FINN decides what you see</h3>
+  <p>Every filing gets a materiality score from rules: the filing type, who is involved (a CEO change scores higher than a nominee director), and the amount compared with market cap. Routine paperwork folds away. Price and volume rules run after each close against your thresholds. Research numbers are arithmetic on the company's own statements; the model only extracts management's promises from call transcripts and writes the bull and bear, each point citing the facts it rests on.</p>
+  <h4>Where the work happens</h4>
+  <div class="tier"><b>Rules</b><span>${e.rules} of ${e.rules + e.llm + e.none} filings triaged with no model call. Alerts, results maths, the promise scoring and every research number also run here. Cost: nothing.</span></div>
+  <div class="tier"><b>Cheap</b><span>Filings the rules can't place, one-line summaries, and guidance extraction from transcript chunks. Cached by content hash, so re-runs are free.</span></div>
+  <div class="tier"><b>Strong</b><span>Bull/bear synthesis on request, once per company per set of documents.</span></div>
+  <h4>Checked against independent sources · ${ok}/${v.length} within tolerance</h4>
+  <div>${v.map(x => `<div class="vrow"><span class="${x.pass ? "ok" : "down"}">${x.pass ? "✓" : "!"}</span><span>${esc(x.check)}${x.note ? `<br><span class="faint">${esc(x.note)}</span>` : ""}</span><span class="mono">${x.diff_pct > 0 ? "+" : ""}${x.diff_pct}%</span></div>`).join("")}</div>
+  <h4>This build's data</h4>
+  <ul>${(DATA.sources.feeds || []).map(f => `<li><b>${esc(f.what)}</b> — ${esc(f.from)}${f.note ? `. <span class="muted">${esc(f.note)}</span>` : ""}</li>`).join("")}</ul>
+  <p class="note">Snapshot taken ${esc(DATA.sources.snapshot_taken || "")}; prices are end of day ${shortDay(DATA.eod)}. Not investment advice.</p>
+  <div class="actions"><button class="btn primary" id="closeAbout">Close</button></div>`;
+}
+
+// ---------------- router / events ----------------
+let sample = null;
+function route() {
+  const h = (location.hash || "#today").slice(1);
+  const tab = h.startsWith("research") ? "research" : ["today", "rules", "season"].includes(h) ? h : "today";
+  document.querySelectorAll(".tabs a").forEach(a => a.setAttribute("aria-current", a.dataset.tab === tab ? "page" : "false"));
+  const app = $("#app");
+  if (tab === "today") app.innerHTML = renderToday();
+  else if (tab === "rules") app.innerHTML = renderRules();
+  else if (tab === "season") app.innerHTML = renderSeason();
+  else {
+    const t = (h.split("-")[1] || "dixon").toUpperCase();
+    app.innerHTML = renderResearch(DATA.research[t] ? t : "DIXON");
+    if (sample) $("#askBox").hidden = false;
+  }
+  $(".tabs a[data-tab='research']").href = tab === "research" ? location.hash : $(".tabs a[data-tab='research']").getAttribute("href");
+}
+function rerender() { const y = scrollY; route(); scrollTo(0, y); }
+
+document.addEventListener("click", e => {
+  const w = e.target.closest("[data-win]");
+  if (w) {
+    WINDOW = w.dataset.win === "custom" ? "custom" : +w.dataset.win;
+    if (WINDOW === "custom" && !RANGE) { RANGE = { from: isoOf(new Date(NOW.getTime() - 7 * 864e5)), to: isoOf(NOW) }; store.set("range", RANGE); }
+    store.set("window", WINDOW); return rerender();
+  }
+  const d = e.target.closest("[data-done]");
+  if (d) { DONE.add(d.dataset.done); store.set("done", [...DONE]); return rerender(); }
+  if (e.target.closest("#undoDone")) { DONE.clear(); store.set("done", []); return rerender(); }
+  const c = e.target.closest("[data-cat]");
+  if (c) { const k = c.dataset.cat; TH.alert_categories = TH.alert_categories.includes(k) ? TH.alert_categories.filter(x => x !== k) : [...TH.alert_categories, k]; store.set("th", TH); return rerender(); }
+  if (e.target.closest("#resetTh")) { TH = { ...DEFAULT_TH }; store.set("th", {}); return rerender(); }
+  const j = e.target.closest("[data-jump]");
+  if (j) { e.preventDefault(); const el = document.getElementById("x-" + j.dataset.jump); if (el) { el.scrollIntoView({ behavior: "smooth", block: "center" }); el.classList.remove("target-flash"); void el.offsetWidth; el.classList.add("target-flash"); const det = el.querySelector("details"); if (det) det.open = true; } return; }
+  if (e.target.closest("#aboutBtn")) { $("#aboutInner").innerHTML = renderAbout(); $("#about").showModal(); return; }
+  if (e.target.closest("#closeAbout")) { $("#about").close(); return; }
+});
+document.addEventListener("input", e => {
+  const k = e.target.dataset?.th;
+  if (!k) return;
+  TH[k] = Number(e.target.value);
+  store.set("th", TH);
+  const out = e.target.closest(".ctl").querySelector("output");
+  if (k === "volume_multiple") out.textContent = TH[k].toFixed(1) + "× avg";
+  if (k === "price_move_pct") out.textContent = "±" + TH[k].toFixed(1) + "%";
+  if (k === "materiality_floor") out.textContent = TH[k];
+  clearTimeout(window.__t); window.__t = setTimeout(() => { const id = e.target.id; rerender(); const el = document.getElementById(id); if (el) el.focus(); }, 120);
+});
+document.addEventListener("change", e => {
+  if (e.target.id !== "rangeFrom" && e.target.id !== "rangeTo") return;
+  const f = $("#rangeFrom").value, t = $("#rangeTo").value;
+  if (!f || !t) return;
+  RANGE = f <= t ? { from: f, to: t } : { from: t, to: f };
+  store.set("range", RANGE); rerender();
+});
+$("#about").addEventListener("click", e => { if (e.target === $("#about")) $("#about").close(); });
+
+let askCtl = null;
+document.addEventListener("submit", async e => {
+  if (e.target.id !== "askForm") return;
+  e.preventDefault();
+  const q = $("#askQ").value.trim(), t = (location.hash.split("-")[1] || "dixon").toUpperCase();
+  if (!q || !sample) return;
+  const r = DATA.research[t];
+  const ctx = { company: r.name, snapshot: r.snapshot, signals: r.signals, ledger: (r.ledger.items || []).map(i => ({ id: i.id, metric: i.metric, status: i.status, detail: i.detail, said: i.said_on.map(s => ({ date: s.date, speaker: s.speaker, quote: s.quote })), outcome: i.actual?.source })),
+    annual: { years: r.trajectory.years, revenue: r.trajectory.lines.Sales.series, opm: r.trajectory.opm, pat: r.trajectory.lines["Net Profit"].series, cfo: r.cash.cfo, fcf: r.cash.fcf, de: r.balance_sheet.de }, quarters: r.quarters, bull_bear: r.bull_bear };
+  const prompt = `You are FINN, a research assistant for a fund manager. Answer the question about ${r.name} using ONLY the JSON below, which comes from the company's filings and earnings calls. Do not use outside knowledge, news or opinions. If the data does not answer it, say so in one line. Be brief: at most 5 sentences or bullets, numbers first, and cite the ids you used in brackets like [D5] or [cash].\n\nDATA:\n${JSON.stringify(ctx)}\n\nQUESTION: ${q}`;
+  const ans = $("#askAns"), btn = $("#askGo");
+  askCtl?.abort(); askCtl = new AbortController();
+  ans.hidden = false; ans.textContent = "Thinking…"; btn.disabled = true;
+  try { await sample(prompt, { signal: askCtl.signal, onText: ({ text }) => { ans.textContent = text; } }); }
+  catch (err) {
+    if (["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(err.code)) { $("#askBox").hidden = true; sample = null; }
+    else if (err.code !== "cancelled") ans.textContent = (err.text ? err.text + "\n\n" : "") + (err.code === "rate_limited" ? "Too many questions just now. Try again in a minute." : "That didn't go through. Try again.");
+  } finally { btn.disabled = false; }
+});
+
+$("#stamp").innerHTML = `${day(DATA.generated_at)} · ${DATA.generated_at.slice(11, 16)} IST<br><span class="faint">15 holdings · EOD ${shortDay(DATA.eod)}</span>`;
+addEventListener("hashchange", () => { route(); scrollTo(0, 0); });
+route();
+(async () => { try { if (window.claude?.use) { sample = await window.claude.use("sample"); if (sample && location.hash.startsWith("#research")) { const b = $("#askBox"); if (b) b.hidden = false; } } } catch { sample = null; } })();
+</script>

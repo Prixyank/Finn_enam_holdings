@@ -1,0 +1,155 @@
+{
+ "_meta": {
+  "prompt": "finn/prompts/bull_bear.md",
+  "by": "Claude Opus 5.5 in the build session, standing in for the tier-2 model",
+  "inputs": "research signals (fact ids) + promise ledger only — no outside knowledge",
+  "note": "Every point cites ids the app can link to. Dixon's first bear point was corrected after reading the Q1 FY27 results filing: the earlier draft attributed Q1's profit to a fair-value gain."
+ },
+ "DIXON": {
+  "bull": [
+   {
+    "point": "Revenue compounded ~50% a year for five years while suppliers fund working capital (−3 days).",
+    "cites": [
+     "growth",
+     "wc"
+    ]
+   },
+   {
+    "point": "Hits the numbers it controls: capex and telecom revenue landed on guidance; IT hardware and FY27 revenue are tracking ahead.",
+    "cites": [
+     "D12",
+     "D9",
+     "D11",
+     "D14"
+    ]
+   },
+   {
+    "point": "Profits turn into cash — operating cash is 121% of six-year profit — on a light balance sheet (D/E 0.21), with a clean auditor's conclusion.",
+    "cites": [
+     "cash",
+     "leverage"
+    ]
+   }
+  ],
+  "bear": [
+   {
+    "point": "Q1 profit leaned on ₹528 cr of other income, and the auditor flags ₹1,110 cr of PLI income still awaiting government sign-off.",
+    "cites": [
+     "other_income",
+     "audit"
+    ]
+   },
+   {
+    "point": "Dates and volumes are unreliable: 0 of 4 capacity dates kept and FY26 phone volumes missed by 18%.",
+    "cites": [
+     "D1",
+     "D5",
+     "D6",
+     "D7"
+    ]
+   },
+   {
+    "point": "Margin keeps sliding (4.5% → 3.8%, Q1 at 3.0%) while the promised expansion moves out to FY28.",
+    "cites": [
+     "margin",
+     "D13",
+     "D15"
+    ]
+   }
+  ]
+ },
+ "TCS": {
+  "bull": [
+   {
+    "point": "A cash machine: free cash flow ≈96% of profit over six years, 81% paid out, debt/equity 0.11.",
+    "cites": [
+     "cash",
+     "payout",
+     "leverage"
+    ]
+   },
+   {
+    "point": "Did what it said on AI and orders: AI revenue $1.8 bn → $3 bn+ annualised in three quarters; FY26 order book beat the $38–39 bn it guided.",
+    "cites": [
+     "T6",
+     "T7"
+    ]
+   },
+   {
+    "point": "Manufacturing turned in Q2 exactly as guided (+3.1% QoQ in constant currency).",
+    "cites": [
+     "T4"
+    ]
+   }
+  ],
+  "bear": [
+   {
+    "point": "Growth has slowed to +4.6% last year from a 10% five-year pace, and operating margin is down 130 bps.",
+    "cites": [
+     "growth",
+     "margin"
+    ]
+   },
+   {
+    "point": "July's 'exit FY27 at 25%+' margin target was gone by October, with Q2 stuck at 24%.",
+    "cites": [
+     "T2"
+    ]
+   },
+   {
+    "point": "Debtor days up from 67 to 93 and fixed assets +38% in a year — the asset-light model is getting heavier.",
+    "cites": [
+     "receivables",
+     "capex"
+    ]
+   }
+  ]
+ },
+ "TRENT": {
+  "bull": [
+   {
+    "point": "Revenue ~51% CAGR over five years with operating margin up from 4.4% to 18.7%.",
+    "cites": [
+     "growth",
+     "margin"
+    ]
+   },
+   {
+    "point": "Growth pays for itself: negative working capital and operating cash at 133% of six-year profit.",
+    "cites": [
+     "wc",
+     "cash"
+    ]
+   },
+   {
+    "point": "Moderate leverage (D/E 0.37) leaves room to keep opening stores.",
+    "cites": [
+     "leverage"
+    ]
+   }
+  ],
+  "bear": [
+   {
+    "point": "Growth has more than halved to +17% last year, yet the stock trades at 80.7× earnings.",
+    "cites": [
+     "growth",
+     "valuation"
+    ]
+   },
+   {
+    "point": "New stores weigh on returns: depreciation +52%, fixed assets +42%, ROCE off its 31% peak.",
+    "cites": [
+     "depreciation",
+     "capex",
+     "returns"
+    ]
+   },
+   {
+    "point": "No earnings calls, so management's forward claims can't be checked against delivery.",
+    "cites": [
+     "disclosure"
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,212 @@
+[
+ {
+  "check": "RELIANCE close 26-Oct",
+  "finn": 1201.8,
+  "reference": 1202,
+  "diff_pct": -0.02,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "ITC close 26-Oct",
+  "finn": 260.5,
+  "reference": 260,
+  "diff_pct": 0.19,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "LT close 26-Oct",
+  "finn": 3680.0,
+  "reference": 3680,
+  "diff_pct": 0.0,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "SUNPHARMA close 26-Oct",
+  "finn": 1740.0,
+  "reference": 1740,
+  "diff_pct": 0.0,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "TITAN close 26-Oct",
+  "finn": 4323.0,
+  "reference": 4323,
+  "diff_pct": 0.0,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "BAJFINANCE close 26-Oct",
+  "finn": 918.7,
+  "reference": 919,
+  "diff_pct": -0.03,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "ETERNAL close 26-Oct",
+  "finn": 325.55,
+  "reference": 326,
+  "diff_pct": -0.14,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "KPITTECH close 26-Oct",
+  "finn": 536.55,
+  "reference": 537,
+  "diff_pct": -0.08,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "CDSL close 26-Oct",
+  "finn": 1196.0,
+  "reference": 1196,
+  "diff_pct": 0.0,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "screener.in price (26 Oct)",
+  "note": "independent price feeds agree"
+ },
+ {
+  "check": "TCS Q2FY27 revenue (₹ cr)",
+  "finn": 73188,
+  "reference": 73188,
+  "diff_pct": 0.0,
+  "tolerance_pct": 0.1,
+  "pass": true,
+  "source": "TCS results coverage (₹73,188 cr)",
+  "note": "the call transcript says 73,288 — a speech-to-text error; FINN never sources numbers from transcripts"
+ },
+ {
+  "check": "TCS Q2FY27 EBIT margin (%)",
+  "finn": 23.98,
+  "reference": 24.0,
+  "diff_pct": -0.08,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "TCS press release (operating margin 24.0%)",
+  "note": "TCS's 'operating margin' is after depreciation; FINN's EBITDA margin (25.7%) is before it — both reconcile"
+ },
+ {
+  "check": "TCS Q2FY27 PAT (₹ cr)",
+  "finn": 13934,
+  "reference": 13884,
+  "diff_pct": 0.36,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "TCS attributable net profit (₹13,884 cr)",
+  "note": "screener's figure includes minority interest; the card labels PAT as consolidated pre-minority"
+ },
+ {
+  "check": "Dixon Q1FY27 revenue (₹ cr)",
+  "finn": 15548,
+  "reference": 15557,
+  "diff_pct": -0.06,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "Dixon Q1 FY27 call",
+  "note": ""
+ },
+ {
+  "check": "Dixon Q4FY26 revenue (₹ cr)",
+  "finn": 10511,
+  "reference": 10520,
+  "diff_pct": -0.09,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "Dixon Q4 FY26 call",
+  "note": ""
+ },
+ {
+  "check": "Dixon Q3FY26 revenue (₹ cr)",
+  "finn": 10672,
+  "reference": 10678,
+  "diff_pct": -0.06,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "Dixon Q3 FY26 call",
+  "note": ""
+ },
+ {
+  "check": "Dixon Q1FY27 EBITDA (₹ cr)",
+  "finn": 463,
+  "reference": 472,
+  "diff_pct": -1.91,
+  "tolerance_pct": 3,
+  "pass": true,
+  "source": "Dixon Q1 FY27 call (excl. fair-value gain)",
+  "note": ""
+ },
+ {
+  "check": "Dixon FY26 revenue (₹ cr)",
+  "finn": 48873,
+  "reference": 48893,
+  "diff_pct": -0.04,
+  "tolerance_pct": 0.5,
+  "pass": true,
+  "source": "Dixon Q4 FY26 call",
+  "note": ""
+ },
+ {
+  "check": "Eternal Q2FY27 revenue growth YoY (%)",
+  "finn": 77.6,
+  "reference": 76,
+  "diff_pct": 2.11,
+  "tolerance_pct": 3,
+  "pass": true,
+  "source": "Eternal shareholders' letter (adjusted revenue +76%)",
+  "note": "letter uses 'adjusted revenue'; reported revenue growth is within 2 pts"
+ },
+ {
+  "check": "Dixon Q1FY27 revenue vs results filing (₹ cr)",
+  "finn": 15548,
+  "reference": 15547.66,
+  "diff_pct": 0.0,
+  "tolerance_pct": 0.1,
+  "pass": true,
+  "source": "Dixon Q1 FY27 results filing (NSE)",
+  "note": ""
+ },
+ {
+  "check": "Dixon Q1FY27 other income vs results filing (₹ cr)",
+  "finn": 537,
+  "reference": 528.29,
+  "diff_pct": 1.65,
+  "tolerance_pct": 2,
+  "pass": true,
+  "source": "Dixon Q1 FY27 results filing (NSE)",
+  "note": "screener groups a few items differently; the gap is ₹9 cr"
+ },
+ {
+  "check": "Dixon Q1FY27 PAT vs results filing (₹ cr)",
+  "finn": 718,
+  "reference": 717.83,
+  "diff_pct": 0.02,
+  "tolerance_pct": 0.1,
+  "pass": true,
+  "source": "Dixon Q1 FY27 results filing (NSE)",
+  "note": ""
+ }
+]

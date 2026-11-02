@@ -1,0 +1,33 @@
+{
+  "_meta": {
+    "what": "Auditor, related-party and contingent-liability facts extracted from primary filings (map step with prompts/extract_notes.md). Scoring of these facts is in finn/research.py.",
+    "fetched": "2026-10-27"
+  },
+  "DIXON": {
+    "equity_cr": 4677,
+    "auditor": {
+      "name": "S N Dhawan & CO LLP",
+      "document": "Limited review of Q1 FY27 consolidated results (31 Jul 2026)",
+      "url": "https://nsearchives.nseindia.com/corporate/DIXON_31072026152139_Outcome31072026.pdf",
+      "opinion": "unmodified",
+      "attention": [
+        {"topic": "PLI incentive receivable", "amount_cr": 1110.06, "offset_cr": 603.95,
+         "detail": "A subsidiary booked ₹1,110 cr of PLI income for over-performance across years; it is still receivable at 30 Jun 2026, pending the government agency's determination. A related ₹604 cr is payable to a customer."}
+      ],
+      "unreviewed": {"count": 2, "revenue_cr": 2336.5, "revenue_share_pct": 15.0, "pat_cr": 32.21}
+    },
+    "results_check": {"revenue_cr": 15547.66, "other_income_cr": 528.29, "pbt_cr": 868.98, "pat_cr": 717.83, "pat_owners_cr": 663.42},
+    "rpt_approvals": {
+      "document": "Notice of the 33rd AGM (28 Sep 2026), annual report FY2025-26",
+      "url": "https://nsearchives.nseindia.com/annual_reports/AR_31329_DIXON_2025_2026_A_15487496_03092026220551.pdf",
+      "items": [
+        {"entity": "Dixon Electro Appliances (51% Dixon; 49% Beetel Teletech, a Bharti Airtel group company)", "counterparty": "Bharti Airtel Ltd",
+         "nature": "Sale of telecom products, appliances, components and related services", "limit_cr_per_year": 4500, "period": "FY28 and FY29",
+         "pct_of_turnover": 9.2, "last_year_actual_cr": 2496.66, "share_of_entity_turnover_pct": 79.46}
+      ],
+      "other_items": ["Material RPTs of Padget Electronics with IsmartU India (50.1% subsidiary)", "Material RPTs of IsmartU India", "Material RPTs of Kunshan Q Tech Microelectronics (India)", "Material RPTs of Dixtel Infocom"],
+      "pay_items": ["Re-appointment of Sunil Vachani (Whole-time Director), incl. approval to pay above ₹5 cr or 2.5% of net profit", "Re-appointment of Atul B. Lall (MD) for 2027–2032", "Remuneration of Saurabh Gupta (Director & CFO) for FY28"]
+    },
+    "contingent_liabilities": {"status": "not read", "why": "The notes to the FY26 financial statements could not be read in this build: the company's copy is image-based and the exchange copy was cut off after the AGM notice. The quarterly results disclose none."}
+  }
+}

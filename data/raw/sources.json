@@ -1,0 +1,12 @@
+{
+  "snapshot_taken": "2026-10-27 ~10:30–12:30 IST",
+  "eod_cutoff": "2026-10-26 close (27 Oct was intraday at snapshot time, so its bar is excluded)",
+  "feeds": [
+    {"what": "Quarterly results, annual statements, ratios, shareholding, recent announcements", "from": "screener.in company pages (consolidated)", "live_connector": "finn/sources/screener.py", "note": "screener shows the ~5 most recent announcements per company; the live connector reads the full NSE feed."},
+    {"what": "EOD price & volume (12 tickers)", "from": "investing.com historical-data pages", "live_connector": "finn/sources/prices.py (yfinance)", "note": "Yahoo/NSE/BSE APIs were unreachable from the build sandbox."},
+    {"what": "EOD price only (POLYCAB, HAL, CDSL)", "from": "choiceindia.com price-history pages", "live_connector": "finn/sources/prices.py (yfinance)", "note": "No volume in this source, so the volume rule abstains for these three."},
+    {"what": "Earnings-call guidance (Dixon ×4, TCS ×3)", "from": "verbatim call transcripts (earningscalls.dev mirror of the company calls)", "live_connector": "finn/sources/docs.py (BSE / company-IR PDFs)"},
+    {"what": "Incoming CEO background (HDFC Bank)", "from": "Business Today, Entrepreneur India, NISM board profile", "live_connector": "push-side enrichment via web search (allowed by the brief)"},
+    {"what": "Cross-checks", "from": "TCS Q2 FY27 press release (tcs.com); results coverage headlines", "live_connector": "—"}
+  ]
+}

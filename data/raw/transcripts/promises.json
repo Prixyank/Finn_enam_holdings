@@ -1,0 +1,680 @@
+{
+ "_meta": {
+  "what": "Forward-looking statements extracted from earnings-call transcripts (map step), plus the later data point each was checked against.",
+  "extraction": "Map step run per transcript with prompts/extract_guidance.md. In this build the transcripts were read through a verbatim transcript archive (earningscalls.dev) because BSE PDFs are unreachable from the build sandbox; the production connector reads the BSE / company-IR PDF. TCS Q3 FY26 (12 Jan 2026) added in a second pass.",
+  "quote_policy": "Quotes are short (<15 words) verbatim management lines kept as evidence.",
+  "status_rules": "Computed by finn/ledger.py, not by the model."
+ },
+ "DIXON": {
+  "calls": [
+   {
+    "id": "Q2FY26",
+    "date": "2025-10-17",
+    "label": "Q2 FY26 call"
+   },
+   {
+    "id": "Q3FY26",
+    "date": "2026-01-29",
+    "label": "Q3 FY26 call"
+   },
+   {
+    "id": "Q4FY26",
+    "date": "2026-05-12",
+    "label": "Q4 FY26 call"
+   },
+   {
+    "id": "Q1FY27",
+    "date": "2026-07-31",
+    "label": "Q1 FY27 call"
+   }
+  ],
+  "promises": [
+   {
+    "id": "D1",
+    "theme": "Mobile volumes",
+    "metric": "FY26 smartphone volume",
+    "kind": "numeric",
+    "unit": "mn units",
+    "said": [
+     {
+      "call": "Q2FY26",
+      "lo": 40,
+      "hi": 42,
+      "speaker": "Atul Lall",
+      "quote": "about 40–42 million units for FY26"
+     }
+    ],
+    "actual": {
+     "value": 33,
+     "source": "Q4FY26 call: FY26 smartphones incl. exports ~33 mn",
+     "call": "Q4FY26"
+    }
+   },
+   {
+    "id": "D2",
+    "theme": "Mobile volumes",
+    "metric": "Q4 FY26 smartphone volume",
+    "kind": "numeric",
+    "unit": "mn units",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "lo": 7.0,
+      "hi": 7.5,
+      "speaker": "Atul Lall",
+      "quote": "Q4 volumes are expected to be somewhere between 7 million to 7.5 million."
+     }
+    ],
+    "actual": {
+     "value": 5.6,
+     "source": "Q4FY26 call: Q4 volume ~5.6 mn (CFO)",
+     "call": "Q4FY26"
+    }
+   },
+   {
+    "id": "D3",
+    "theme": "Mobile volumes",
+    "metric": "Q1 FY27 smartphone volume growth QoQ",
+    "kind": "numeric",
+    "unit": "%",
+    "said": [
+     {
+      "call": "Q4FY26",
+      "lo": 15,
+      "hi": null,
+      "speaker": "Atul Lall",
+      "quote": "we expect a high double-digit growth quarter-on-quarter in the smartphones volume",
+      "note": "'high double-digit' read as ≥15%"
+     }
+    ],
+    "actual": {
+     "value": 33.9,
+     "source": "Q1FY27 call: ~7.5 mn vs ~5.6 mn in Q4 → +34% QoQ",
+     "call": "Q1FY27"
+    }
+   },
+   {
+    "id": "D4",
+    "theme": "Mobile volumes",
+    "metric": "FY27 smartphone volume",
+    "kind": "restated",
+    "unit": "mn units",
+    "said": [
+     {
+      "call": "Q2FY26",
+      "lo": 55,
+      "hi": 60,
+      "speaker": "Atul Lall",
+      "quote": "55–60 million including Vivo; later 60–65 million",
+      "note": "incl. Vivo"
+     },
+     {
+      "call": "Q3FY26",
+      "lo": null,
+      "hi": null,
+      "speaker": "Atul Lall",
+      "quote": "For '26-'27, the numbers are still being worked out."
+     },
+     {
+      "call": "Q4FY26",
+      "lo": 33,
+      "hi": 33,
+      "speaker": "Saurabh Gupta",
+      "quote": "the overall volumes without Vivo is going to be almost similar",
+      "note": "ex-Vivo, ≈FY26's 33 mn"
+     },
+     {
+      "call": "Q1FY27",
+      "lo": 32,
+      "hi": 33,
+      "speaker": "Atul Lall",
+      "quote": "We feel we should be somewhere close to that number.",
+      "note": "ex-Vivo; Vivo only from Q3"
+     }
+    ]
+   },
+   {
+    "id": "D5",
+    "theme": "Capacity timelines",
+    "metric": "Noida 1 mn sq ft mobile campus goes live",
+    "kind": "timeline",
+    "said": [
+     {
+      "call": "Q2FY26",
+      "due": "Q4FY26",
+      "speaker": "Atul Lall",
+      "quote": "completion by March 2026"
+     },
+     {
+      "call": "Q3FY26",
+      "due": "Q2FY27",
+      "speaker": "Atul Lall",
+      "quote": "mass production to start by Q2 of '26-'27."
+     },
+     {
+      "call": "Q4FY26",
+      "due": "Q2FY27",
+      "speaker": "Atul Lall",
+      "quote": "we expect the operation to commence by Q2 this fiscal"
+     },
+     {
+      "call": "Q1FY27",
+      "due": "Q3FY27",
+      "speaker": "Atul Lall",
+      "quote": "We expect the operations to commence from Q3 of this fiscal."
+     }
+    ]
+   },
+   {
+    "id": "D6",
+    "theme": "Capacity timelines",
+    "metric": "Longcheer JV smartphone factory operational",
+    "kind": "timeline",
+    "said": [
+     {
+      "call": "Q2FY26",
+      "due": "Q1FY27",
+      "speaker": "Atul Lall",
+      "quote": "operational by April 2026"
+     },
+     {
+      "call": "Q3FY26",
+      "due": "Q1FY27",
+      "speaker": "Atul Lall",
+      "quote": "Initially, the capacity being created there is going to be of 18 million units."
+     },
+     {
+      "call": "Q4FY26",
+      "due": "Q3FY27",
+      "speaker": "Atul Lall",
+      "quote": "is expected to start operations by Q3"
+     }
+    ]
+   },
+   {
+    "id": "D7",
+    "theme": "Capacity timelines",
+    "metric": "HKC display JV trial production",
+    "kind": "timeline",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "due": "Q2FY27",
+      "speaker": "Atul Lall",
+      "quote": "trial should commence by Q2 of next fiscal."
+     },
+     {
+      "call": "Q4FY26",
+      "due": "Q3FY27",
+      "speaker": "Atul Lall",
+      "quote": "The trials will start from beginning of Q3"
+     },
+     {
+      "call": "Q1FY27",
+      "due": "Q3FY27",
+      "speaker": "Atul Lall",
+      "quote": "the trial will start from the beginning of Q3"
+     }
+    ]
+   },
+   {
+    "id": "D8",
+    "theme": "Approvals",
+    "metric": "Vivo JV PN3 (government) approval",
+    "kind": "timeline",
+    "said": [
+     {
+      "call": "Q2FY26",
+      "due": "Q3FY26",
+      "speaker": "Atul Lall",
+      "quote": "expected in the coming weeks"
+     },
+     {
+      "call": "Q3FY26",
+      "due": "Q4FY26",
+      "speaker": "Atul Lall",
+      "quote": "We remain confident of getting the PN3 approval for our Vivo JV soon."
+     },
+     {
+      "call": "Q4FY26",
+      "due": "Q1FY27",
+      "speaker": "Atul Lall",
+      "quote": "We feel that we are very, very close to it."
+     }
+    ],
+    "delivered": {
+     "on": "Q2FY27",
+     "source": "Q1FY27 call: PN3 approval received in July 2026"
+    }
+   },
+   {
+    "id": "D9",
+    "theme": "Segment revenue",
+    "metric": "FY26 telecom revenue",
+    "kind": "numeric",
+    "unit": "₹ cr",
+    "said": [
+     {
+      "call": "Q2FY26",
+      "lo": 4800,
+      "hi": 4800,
+      "speaker": "Atul Lall",
+      "quote": "about INR 4,800 crore"
+     },
+     {
+      "call": "Q3FY26",
+      "lo": 5200,
+      "hi": 5200,
+      "speaker": "Atul Lall",
+      "quote": "This year, we should have revenues close to INR 5,200 crores."
+     }
+    ],
+    "actual": {
+     "value": 5000,
+     "source": "Q4FY26 call: telecom FY26 ~₹5,000 cr",
+     "call": "Q4FY26"
+    }
+   },
+   {
+    "id": "D10",
+    "theme": "Segment revenue",
+    "metric": "FY27 telecom revenue",
+    "kind": "restated",
+    "unit": "₹ cr",
+    "said": [
+     {
+      "call": "Q4FY26",
+      "lo": 7500,
+      "hi": 8000,
+      "speaker": "Saurabh Gupta",
+      "quote": "We are targeting almost INR 7,500 crores, INR 8,000 crores in '26-'27."
+     },
+     {
+      "call": "Q1FY27",
+      "lo": 6700,
+      "hi": 7000,
+      "speaker": "Atul Lall",
+      "quote": "somewhere between INR 6,700 crores to INR 7,000 crores in this fiscal"
+     }
+    ]
+   },
+   {
+    "id": "D11",
+    "theme": "Segment revenue",
+    "metric": "FY27 IT hardware revenue",
+    "kind": "runrate",
+    "unit": "₹ cr",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "lo": 3500,
+      "hi": 4000,
+      "speaker": "Atul Lall",
+      "quote": "somewhere around INR 3,500 crores to INR 4,000 crores."
+     },
+     {
+      "call": "Q4FY26",
+      "lo": 4000,
+      "hi": null,
+      "speaker": "Saurabh Gupta",
+      "quote": "our revenue in this fiscal is going to be more than INR 4,000 crores."
+     }
+    ],
+    "actual": {
+     "value": 1350,
+     "periods_elapsed": 1,
+     "periods_total": 4,
+     "source": "Q1FY27 call: IT hardware ~₹1,350 cr in Q1",
+     "call": "Q1FY27"
+    }
+   },
+   {
+    "id": "D12",
+    "theme": "Capex",
+    "metric": "FY26 capex",
+    "kind": "numeric",
+    "unit": "₹ cr",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "lo": 1100,
+      "hi": 1200,
+      "speaker": "Atul Lall",
+      "quote": "it should be somewhere between INR 1,100 crores, INR 1,200 crores."
+     }
+    ],
+    "actual": {
+     "value": 1058,
+     "source": "Q4FY26 call: FY26 capex ₹1,058 cr",
+     "call": "Q4FY26"
+    }
+   },
+   {
+    "id": "D13",
+    "theme": "Margins",
+    "metric": "Mobile & EMS margin (ex-PLI), next 12 months",
+    "kind": "numeric",
+    "unit": "%",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "lo": 2.8,
+      "hi": 3.1,
+      "speaker": "Atul Lall",
+      "quote": "should be able to have a margin of somewhere between 2.8% to 3.1%"
+     }
+    ],
+    "actual": {
+     "value": 2.63,
+     "source": "Q1FY27 call: Mobile & EMS ₹373 cr on ₹14,179 cr",
+     "call": "Q1FY27"
+    }
+   },
+   {
+    "id": "D14",
+    "theme": "Revenue",
+    "metric": "FY27 revenue ex-Vivo",
+    "kind": "runrate",
+    "unit": "₹ cr",
+    "said": [
+     {
+      "call": "Q4FY26",
+      "lo": 56000,
+      "hi": null,
+      "speaker": "Atul Lall",
+      "quote": "we are targeting almost INR 56,000 crores without the Vivo numbers"
+     }
+    ],
+    "actual": {
+     "value": 15557,
+     "periods_elapsed": 1,
+     "periods_total": 4,
+     "prior_year_share": 0.2626,
+     "seasonality_note": "Q1 FY26 (₹12,836 cr) was 26.3% of FY26 revenue (₹48,873 cr)",
+     "source": "Q1FY27 call: revenue ₹15,557 cr",
+     "call": "Q1FY27"
+    }
+   },
+   {
+    "id": "D15",
+    "theme": "Margins",
+    "metric": "Consolidated margin direction",
+    "kind": "restated",
+    "unit": "",
+    "said": [
+     {
+      "call": "Q2FY26",
+      "text": "4–4.5% at ₹1 lakh cr scale",
+      "speaker": "Saurabh Gupta",
+      "quote": "70–80 bps above the current ~3.7–3.8%"
+     },
+     {
+      "call": "Q4FY26",
+      "text": "slightly under pressure in FY27; +40–45 bps once components deploy",
+      "speaker": "Atul Lall",
+      "quote": "the margin profile will be slightly under pressure this year"
+     },
+     {
+      "call": "Q1FY27",
+      "text": "no improvement from Q1 level this year; improves FY28",
+      "speaker": "Saurabh Gupta",
+      "quote": "we are not expecting a margin improvement from here onwards"
+     }
+    ],
+    "direction": "down",
+    "actual": {
+     "value": 3.0,
+     "source": "Q1FY27 call: EBITDA ₹472 cr on ₹15,557 cr",
+     "call": "Q1FY27"
+    }
+   },
+   {
+    "id": "D16",
+    "theme": "Mobile volumes",
+    "metric": "Q2 FY27 smartphone volume",
+    "kind": "numeric",
+    "unit": "mn units",
+    "said": [
+     {
+      "call": "Q1FY27",
+      "lo": 9.0,
+      "hi": 9.2,
+      "speaker": "Atul Lall",
+      "quote": "somewhere around 9 million to 9.2 million"
+     }
+    ],
+    "actual": null,
+    "check_on": "2026-10-30",
+    "check_note": "Board meets 30 Oct to approve Q2 results"
+   }
+  ]
+ },
+ "TCS": {
+  "calls": [
+   {
+    "id": "Q3FY26",
+    "date": "2026-01-12",
+    "label": "Q3 FY26 call"
+   },
+   {
+    "id": "Q4FY26",
+    "date": "2026-04-09",
+    "label": "Q4 FY26 call"
+   },
+   {
+    "id": "Q1FY27",
+    "date": "2026-07-09",
+    "label": "Q1 FY27 call"
+   },
+   {
+    "id": "Q2FY27",
+    "date": "2026-10-08",
+    "label": "Q2 FY27 call"
+   }
+  ],
+  "promises": [
+   {
+    "id": "T1",
+    "theme": "Margins",
+    "metric": "Q1 FY27 wage-hike margin impact",
+    "kind": "numeric",
+    "unit": "bps",
+    "said": [
+     {
+      "call": "Q4FY26",
+      "lo": 150,
+      "hi": 200,
+      "speaker": "Samir Seksaria",
+      "quote": "in the range of 150 to 200 basis points."
+     }
+    ],
+    "actual": {
+     "value": 170,
+     "source": "Q1FY27 call: increments ~170 bps impact; margin −130 bps QoQ to 24.0%",
+     "call": "Q1FY27"
+    }
+   },
+   {
+    "id": "T7",
+    "theme": "Demand",
+    "metric": "FY26 order book (TCV)",
+    "kind": "numeric",
+    "unit": "$ bn",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "lo": 38,
+      "hi": 39,
+      "speaker": "K. Krithivasan",
+      "quote": "somewhere closer to about $38 billion, $39 billion for the year"
+     }
+    ],
+    "actual": {
+     "value": 40.7,
+     "source": "Q4FY26 call: FY26 TCV $40.7 bn",
+     "call": "Q4FY26"
+    }
+   },
+   {
+    "id": "T2",
+    "theme": "Margins",
+    "metric": "Operating-margin target",
+    "kind": "restated",
+    "unit": "%",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "text": "inch closer to the 26–28% band",
+      "speaker": "Samir Seksaria",
+      "quote": "we want to inch closer to our 26% to 28% band"
+     },
+     {
+      "call": "Q4FY26",
+      "text": "move towards 26%, longer term",
+      "speaker": "Samir Seksaria",
+      "quote": "We'd like to move towards 26%, but on a longer-term basis."
+     },
+     {
+      "call": "Q1FY27",
+      "text": "exit FY27 at 25%+, sooner rather than later",
+      "speaker": "Samir Seksaria",
+      "quote": "We'd want to exit at 25% plus and achieve it sooner rather than later."
+     },
+     {
+      "call": "Q2FY27",
+      "text": "26–28% long-term only; no exit target; ~50 bps M&A headwind in H2",
+      "speaker": "Samir Seksaria",
+      "quote": "we'll continue to endeavor to inch up on our margins"
+     }
+    ],
+    "direction": "down",
+    "actual": {
+     "value": 24.0,
+     "source": "Q2FY27 release: operating margin 24.0%",
+     "call": "Q2FY27"
+    }
+   },
+   {
+    "id": "T3",
+    "theme": "Demand",
+    "metric": "Demand improves in Q2 (cc growth QoQ)",
+    "kind": "direction",
+    "unit": "% cc QoQ",
+    "said": [
+     {
+      "call": "Q1FY27",
+      "text": "improve sometime in Q2",
+      "speaker": "K. Krithivasan",
+      "quote": "I expect the demand to improve sometime in Q2."
+     }
+    ],
+    "baseline": 0.4,
+    "actual": {
+     "value": 0.5,
+     "source": "Q2FY27 release: +0.5% cc QoQ (Q1: +0.4%)",
+     "call": "Q2FY27"
+    },
+    "material_change": 0.5
+   },
+   {
+    "id": "T4",
+    "theme": "Verticals",
+    "metric": "Manufacturing turns around in Q2 (cc QoQ)",
+    "kind": "direction",
+    "unit": "% cc QoQ",
+    "said": [
+     {
+      "call": "Q1FY27",
+      "text": "turn around in Q2",
+      "speaker": "K. Krithivasan",
+      "quote": "Manufacturing, we believe will turn around in Q2."
+     }
+    ],
+    "baseline": 0,
+    "actual": {
+     "value": 3.1,
+     "source": "Q2FY27 call: Manufacturing +3.1% QoQ cc",
+     "call": "Q2FY27"
+    },
+    "material_change": 0.5
+   },
+   {
+    "id": "T5",
+    "theme": "Verticals",
+    "metric": "Life sciences recovers 'soon' (cc QoQ)",
+    "kind": "direction",
+    "unit": "% cc QoQ",
+    "said": [
+     {
+      "call": "Q1FY27",
+      "text": "recovery expected soon",
+      "speaker": "K. Krithivasan",
+      "quote": "Recovery is expected soon."
+     }
+    ],
+    "baseline": 0,
+    "actual": {
+     "value": 0.3,
+     "source": "Q2FY27 call: Life Sciences +0.3% QoQ cc",
+     "call": "Q2FY27"
+    },
+    "material_change": 0.5
+   },
+   {
+    "id": "T6",
+    "theme": "AI",
+    "metric": "AI revenue keeps growing strongly (annualised, $ bn)",
+    "kind": "direction",
+    "unit": "$ bn",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "text": "continue strong growth",
+      "speaker": "Aarthi Subramanian",
+      "quote": "we expect AI revenues to continue to grow with a strong growth rate"
+     },
+     {
+      "call": "Q4FY26",
+      "text": "grow much faster",
+      "speaker": "TCS management",
+      "quote": "they expect them to grow much faster"
+     }
+    ],
+    "baseline": 1.8,
+    "actual": {
+     "value": 3.0,
+     "source": "Q2FY27 call: annualised AI revenue crossed $3 bn",
+     "call": "Q2FY27"
+    },
+    "material_change": 0.3
+   },
+   {
+    "id": "T8",
+    "theme": "Verticals",
+    "metric": "BFSI returns to growth (cc QoQ)",
+    "kind": "direction",
+    "unit": "% cc QoQ",
+    "said": [
+     {
+      "call": "Q3FY26",
+      "text": "return to growth",
+      "speaker": "K. Krithivasan",
+      "quote": "we should return to growth and that should continue."
+     }
+    ],
+    "baseline": 0,
+    "actual": {
+     "value": 2.5,
+     "source": "Q2FY27 call: BFSI +2.5% QoQ cc",
+     "call": "Q2FY27"
+    },
+    "material_change": 0.5
+   }
+  ]
+ },
+ "TRENT": {
+  "calls": [],
+  "promises": [],
+  "note": "Trent does not host earnings calls (screener lists presentations only). The narrative check needs investor presentations or AGM speeches; not extracted for this demo."
+ }
+}

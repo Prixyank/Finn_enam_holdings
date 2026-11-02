@@ -1,0 +1,50 @@
+name: FINN refresh and alerts
+
+on:
+  schedule:
+    - cron: "*/30 3-9 * * 1-5"  # every 30 min, 09:00–15:30 IST: new filings → push alerts
+    - cron: "45 10 * * 1-5"     # 16:15 IST, after the close: EOD price/volume rules + app refresh
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency: { group: finn, cancel-in-progress: false }
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/cache@v4          # model cache + record of alerts already sent
+        with:
+          path: ~/.cache/finn
+          key: finn-cache-${{ github.run_id }}
+          restore-keys: finn-cache-
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+      - run: python -m finn live
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - run: python -m finn notify
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+          FINN_APP_URL: ${{ vars.FINN_APP_URL }}
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: dist }
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: { name: github-pages }
+    steps:
+      - uses: actions/deploy-pages@v4
