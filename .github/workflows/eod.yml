@@ -26,7 +26,7 @@ jobs:
           key: finn-cache-${{ github.run_id }}
           restore-keys: finn-cache-
       - run: pip install -r requirements.txt
-      - run: pytest -q
+      - run: python -m pytest -q
       - run: python -m finn live
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
